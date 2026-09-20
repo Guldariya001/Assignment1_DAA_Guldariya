@@ -1,104 +1,172 @@
 # Assignment 1 — Design and Analysis of Algorithms
+
 **Student:** Urazaliyeva Guldariya  
 **Group:** SE-2521
+
 ## Description
 
-This project implements and analyzes three algorithms:
+This project implements and analyzes three divide-and-conquer algorithms:
 
 - MergeSort
 - QuickSort
 - QuickSelect
 
-The purpose of the assignment is to compare their performance using different input sizes and different types of input data.
+The purpose of the assignment is to study the theoretical and experimental performance of these algorithms using different input sizes and input types.
+
+The algorithms are evaluated using:
+
+- Running time
+- Number of comparisons
+- Maximum recursion depth
 
 ## Implemented Algorithms
 
 ### MergeSort
-MergeSort divides the array into smaller parts, recursively sorts them, and then merges the sorted parts.
+
+MergeSort recursively divides the array into two parts, sorts both parts, and merges them.
+
+The implementation uses a reusable auxiliary buffer and Insertion Sort for small subarrays.
+
+Expected time complexity:
+
+`Θ(n log n)`
 
 ### QuickSort
-QuickSort uses partitioning to divide the array and recursively sort the resulting parts. The implementation uses 3-way partitioning, which is useful when the input contains many duplicate values.
+
+QuickSort partitions the array around a pivot and recursively sorts the resulting partitions.
+
+The implementation uses randomized pivot selection and 3-way partitioning. Recursion is performed on the smaller partition while the larger partition is processed iteratively.
+
+Expected time complexity:
+
+`Θ(n log n)` on average.
 
 ### QuickSelect
-QuickSelect uses partitioning to find the k-th smallest element without sorting the entire array.
+
+QuickSelect finds the k-th smallest element without completely sorting the array.
+
+It uses partitioning similar to QuickSort but continues only in the part containing the required element.
+
+Expected time complexity:
+
+`Θ(n)` on average.
 
 ## Testing
 
-JUnit tests were used to verify the correctness of the implementations.
+JUnit tests are included for the implemented algorithms.
 
-The tests include:
+The tests cover cases such as:
 
 - Empty arrays
-- Arrays with one element
+- Single-element arrays
 - Random arrays
 - Sorted arrays
 - Arrays with duplicate values
-- Invalid values of k for QuickSelect
+- Invalid values of `k` for QuickSelect
 
 ## Benchmark
 
-The algorithms were tested with the following input sizes:
+The benchmark tests the algorithms with the following input sizes:
 
 - 1,000
 - 10,000
 - 100,000
 - 1,000,000
 
-Three types of input were used:
+Three types of input are used:
 
 - Random input
 - Sorted input
-- Input with many duplicates
+- Input with many duplicate values
 
-Each algorithm was evaluated using:
+The following metrics are collected:
 
 - Running time in milliseconds
 - Number of comparisons
 - Maximum recursion depth
 
-The benchmark results are stored in `results.csv`.
+Each configuration is executed 5 times and the results are averaged.
+
+The complete benchmark results are stored in:
+
+`results.csv`
+
+## Experimental Plots
+
+The project contains three main plots.
+
+### Running Time vs Array Size
+
+`plot_time_vs_n.png`
+
+This plot compares the running time of MergeSort, QuickSort, and QuickSelect for random, sorted, and duplicate-heavy input.
+
+### Maximum Recursion Depth vs Array Size
+
+`plot_depth_vs_n.png`
+
+This plot shows how maximum recursion depth changes as the input size increases.
+
+### Comparison Ratio vs Array Size
+
+`plot_ratio_vs_n.png`
+
+The normalized comparison ratio is calculated as follows.
+
+For MergeSort and QuickSort:
+
+`comparisons / (n * log2(n))`
+
+For QuickSelect:
+
+`comparisons / n`
+
+The ratio plot is used to compare the experimental results with the expected asymptotic growth of the algorithms.
+
+## How to Build and Run
+
+### Requirements
+
+- Java 17
+- Maven
+- JUnit 5
+- IntelliJ IDEA or another Java IDE
+
+### Run Tests
+
+From the project directory, run:
+
+```bash
+mvn test
+```
+
+This command compiles the project and runs all JUnit tests.
+
+### Run the Benchmark
+
+The benchmark can be run directly from IntelliJ IDEA.
+
+Open:
+
+`src/main/java/daa/Benchmark.java`
+
+and run the `main` method.
+
+The benchmark generates the experimental results stored in `results.csv`.
 
 ## Experimental Results
 
-### Running Time
+The experimental results show that performance depends on both the algorithm and the structure of the input data.
 
-For random input, the running time increased as the input size increased. At n = 1,000,000, MergeSort took approximately 117.66 ms, QuickSort took 148.91 ms, and QuickSelect took 18.30 ms.
+MergeSort demonstrates stable behavior and logarithmic recursion depth.
 
-For sorted input, MergeSort took approximately 36.54 ms, QuickSort took 80.82 ms, and QuickSelect took 4.84 ms.
+QuickSort performs particularly well for arrays containing many duplicate values because the implementation uses 3-way partitioning.
 
-For input with many duplicates, MergeSort took approximately 55.36 ms, QuickSort took 17.37 ms, and QuickSelect took 12.06 ms.
+QuickSelect has relatively low measured running times and comparison counts because it finds only the required k-th smallest element instead of sorting the entire array.
 
-These results show that the type of input data can have a noticeable effect on running time.
+QuickSelect therefore should not be considered a direct replacement for MergeSort or QuickSort when a completely sorted array is required.
 
-### Number of Comparisons
-
-For random input with n = 1,000,000, MergeSort performed 19,889,337 comparisons, QuickSort performed 39,433,739 comparisons, and QuickSelect performed 4,160,679 comparisons.
-
-For sorted input with n = 1,000,000, MergeSort performed 9,071,040 comparisons, QuickSort performed 38,353,712 comparisons, and QuickSelect performed 5,084,132 comparisons.
-
-For input with many duplicates, MergeSort performed 18,922,524 comparisons, QuickSort performed 5,298,558 comparisons, and QuickSelect performed 3,202,181 comparisons.
-
-The results show that the number of comparisons depends on both the algorithm and the structure of the input data.
-
-### Maximum Recursion Depth
-
-For random input with n = 1,000,000, the maximum recursion depth was 18 for MergeSort, 13 for QuickSort, and 31 for QuickSelect.
-
-For sorted input, the maximum recursion depth was 18 for MergeSort, 12 for QuickSort, and 25 for QuickSelect.
-
-For input with many duplicates, the maximum recursion depth was 18 for MergeSort, 2 for QuickSort, and 4 for QuickSelect.
-
-MergeSort showed predictable growth in recursion depth as the input size increased. QuickSort and QuickSelect had very small recursion depths for input containing many duplicate values.
-
-## Conclusion
-
-The experiments show that algorithm performance depends on both the input size and the structure of the input data.
-
-MergeSort showed relatively stable behavior for different types of input. QuickSort performed particularly well on arrays containing many duplicate values with this implementation. QuickSelect had relatively low running times and numbers of comparisons because it searches only for the required k-th smallest element instead of sorting the entire array.
-
-Therefore, QuickSelect should not be considered a direct replacement for MergeSort or QuickSort when a completely sorted array is required. It solves a different problem.
-
-The experiment also demonstrates that running time alone is not enough to analyze algorithm behavior. The number of comparisons and maximum recursion depth provide additional information about the performance of each algorithm.
+More detailed theoretical analysis, experimental tables, ratio analysis, and discussion are available in `REPORT.md`.
 
 ## Project Structure
 
@@ -108,17 +176,36 @@ Assignment1_DAA/
 │   ├── main/
 │   │   └── java/
 │   │       └── daa/
+│   │           ├── Benchmark.java
 │   │           ├── MergeSort.java
-│   │           ├── QuickSort.java
-│   │           ├── QuickSelect.java
 │   │           ├── Metrics.java
-│   │           └── Benchmark.java
+│   │           ├── QuickSelect.java
+│   │           └── QuickSort.java
 │   └── test/
 │       └── java/
 │           └── daa/
 │               ├── MergeSortTest.java
-│               ├── QuickSortTest.java
-│               └── QuickSelectTest.java
+│               ├── QuickSelectTest.java
+│               └── QuickSortTest.java
+├── .gitignore
+├── plot_depth_vs_n.png
+├── plot_ratio_vs_n.png
+├── plot_time_vs_n.png
 ├── pom.xml
-├── results.csv
-└── README.md
+├── README.md
+├── REPORT.md
+└── results.csv
+```
+
+## Technologies
+
+- Java 17
+- Maven
+- JUnit 5
+- IntelliJ IDEA
+
+## Report
+
+The complete theoretical analysis, experimental results, ratio analysis, and discussion are available in:
+
+`REPORT.md`
